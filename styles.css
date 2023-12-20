@@ -7,18 +7,8 @@ html, body {
   height: 100%; /* Ensure body covers the full height */
 }
 
-/* Style the footer */
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #f0f0f0; /* Set your desired background color */
-  text-align: center;
-  padding: 10px 0; /* Adjust padding as needed */
-}
-
-/* Style the discussions button */
-.discussions-button {
+/* Style the button */
+.button {
   display: inline-block;
   padding: 10px 20px;
   text-decoration: none;
@@ -28,6 +18,16 @@ footer {
   transition: background-color 0.3s ease;
 }
 
-.discussions-button:hover {
+.button:hover {
   background-color: #0056b3; /* Button background color on hover */
+}
+
+/* Style the footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f0f0f0; /* Set your desired background color */
+  text-align: center;
+  padding: 10px 0; /* Adjust padding as needed */
 }

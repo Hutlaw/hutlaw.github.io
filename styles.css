@@ -16,3 +16,7 @@ footer {
   text-align: center;
   padding: 10px 0; /* Adjust padding as needed */
 }
+body {
+  background-color: black;
+  color: white;
+}

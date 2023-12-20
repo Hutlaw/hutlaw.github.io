@@ -1,3 +1,6 @@
+/* styles.css */
+
+/* Reset default margin and padding */
 html, body {
   margin: 0;
   padding: 0;
@@ -12,4 +15,19 @@ footer {
   background-color: #f0f0f0; /* Set your desired background color */
   text-align: center;
   padding: 10px 0; /* Adjust padding as needed */
+}
+
+/* Style the discussions button */
+.discussions-button {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  background-color: #007bff; /* Button background color */
+  color: white; /* Text color */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.discussions-button:hover {
+  background-color: #0056b3; /* Button background color on hover */
 }

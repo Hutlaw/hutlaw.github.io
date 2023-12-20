@@ -20,3 +20,19 @@ body {
   background-color: #332c2b;
   color: white;
 }
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #332c2b;
+  color: white;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

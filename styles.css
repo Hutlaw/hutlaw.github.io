@@ -7,21 +7,6 @@ html, body {
   height: 100%; /* Ensure body covers the full height */
 }
 
-/* Style the button */
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  text-decoration: none;
-  background-color: #007bff; /* Button background color */
-  color: white; /* Text color */
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.button:hover {
-  background-color: #0056b3; /* Button background color on hover */
-}
-
 /* Style the footer */
 footer {
   position: fixed;

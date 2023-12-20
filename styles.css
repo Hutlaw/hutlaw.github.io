@@ -20,6 +20,14 @@ body {
   background-color: #332c2b;
   color: white;
 }
+body {
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Apply styles to the container */
 .container {
   max-width: 100%;
   margin: 0 auto;
@@ -27,12 +35,20 @@ body {
   box-sizing: border-box;
 }
 
-body {
-  background-color: #332c2b;
-  color: white;
+/* Set max-width for images */
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-img {
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  /* Adjust font size and line height for smaller screens */
+  body {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
   max-width: 100%;
   height: auto;
 }

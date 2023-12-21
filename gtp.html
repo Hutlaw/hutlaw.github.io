@@ -54,6 +54,9 @@
             messageDiv.innerHTML = `<p>${message}</p>`;
 
             chatHistoryDiv.appendChild(messageDiv);
+
+            // Scroll to the bottom to always show the latest message
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
         }
     </script>
 

@@ -4,7 +4,7 @@
     <title>ChatGPT API Example</title>
 </head>
 <body>
-    <h1>ChatGPT API Example</h1>
+    <h1>ChatGPT API Example t2</h1>
 
     <div>
         <textarea id="userInput" rows="5" cols="50"></textarea>
@@ -48,15 +48,12 @@
 
         function displayMessage(message, sender) {
             const chatHistoryDiv = document.getElementById('chatHistory');
-            const messageWrapperDiv = document.createElement('div');
             const messageDiv = document.createElement('div');
 
-            messageWrapperDiv.classList.add('messageWrapper', sender);
-            messageDiv.classList.add('message');
-
+            messageDiv.classList.add('message', sender === 'user' ? 'user' : 'bot');
             messageDiv.innerText = message;
-            messageWrapperDiv.appendChild(messageDiv);
-            chatHistoryDiv.appendChild(messageWrapperDiv);
+
+            chatHistoryDiv.appendChild(messageDiv);
 
             // Scroll to the bottom to always show the latest message
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
@@ -64,32 +61,22 @@
     </script>
 
     <style>
-        .messageWrapper {
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .user {
-            justify-content: flex-end;
-        }
-
         .message {
-            margin: 5px;
+            margin: 10px;
             padding: 8px;
-            border-radius: 8px;
+            border-radius: 5px;
             max-width: 70%;
             word-wrap: break-word;
         }
 
-        .user .message {
+        .user {
             background-color: lightblue;
-            align-self: flex-end;
+            text-align: right;
         }
 
-        .bot .message {
+        .bot {
             background-color: lightgreen;
+            text-align: left;
         }
 
         textarea {

@@ -9,7 +9,7 @@
     <div id="chatContainer">
         <div id="chatHistory"></div>
         <div>
-            <textarea id="userInput" rows="5" cols="50"></textarea>
+            <input type="text" id="userInput" placeholder="Type your message here...">
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
@@ -44,12 +44,15 @@
 
         function displayMessage(message, sender) {
             const chatHistoryDiv = document.getElementById('chatHistory');
+            const messageWrapperDiv = document.createElement('div');
             const messageDiv = document.createElement('div');
 
-            messageDiv.classList.add('message', sender);
-            messageDiv.innerHTML = `<p>${message}</p>`;
+            messageWrapperDiv.classList.add('messageWrapper', sender === 'user' ? 'user' : 'bot');
+            messageDiv.classList.add('message');
 
-            chatHistoryDiv.appendChild(messageDiv);
+            messageDiv.innerText = message;
+            messageWrapperDiv.appendChild(messageDiv);
+            chatHistoryDiv.appendChild(messageWrapperDiv);
 
             // Scroll to the bottom to always show the latest message
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
@@ -63,29 +66,58 @@
             flex-direction: column;
             height: 80vh;
             justify-content: space-between;
+            padding: 20px;
+        }
+
+        .messageWrapper {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .user {
+            justify-content: flex-end;
         }
 
         .message {
-            margin: 10px;
+            margin: 5px;
             padding: 8px;
-            border-radius: 5px;
+            border-radius: 8px;
             max-width: 70%;
             word-wrap: break-word;
         }
 
-        .user {
+        .user .message {
             background-color: lightblue;
-            text-align: right;
+            align-self: flex-end;
         }
 
-        .bot {
+        .bot .message {
             background-color: lightgreen;
-            text-align: left;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        button {
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </body>
 </html>
-
-
-
-

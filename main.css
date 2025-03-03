@@ -2,7 +2,6 @@
   font-family: 'HutlawStyle';
   src: url('fonts/HutlawStyle-Regular.ttf') format('truetype');
 }
-
 body {
   margin: 0;
   overflow: hidden;
@@ -10,7 +9,6 @@ body {
   color: white;
   font-family: 'HutlawStyle', sans-serif;
 }
-
 canvas {
   position: fixed;
   top: 0;
@@ -19,7 +17,6 @@ canvas {
   height: 100%;
   z-index: -2;
 }
-
 .bubble-container {
   position: relative;
   display: flex;
@@ -30,7 +27,6 @@ canvas {
   width: 100%;
   overflow: hidden;
 }
-
 .bubble {
   position: absolute;
   width: 80%;
@@ -44,12 +40,11 @@ canvas {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
   opacity: 0;
   transition: opacity 0.5s, transform 0.5s, box-shadow 0.5s;
+  pointer-events: none;
 }
-
 .bubble h1 {
   margin-top: 0;
 }
-
 .bubble a.bubble-button {
   display: inline-block;
   margin-top: 20px;
@@ -60,22 +55,19 @@ canvas {
   border-radius: 10px;
   transition: background 0.3s;
 }
-
 .bubble a.bubble-button:hover {
   background: rgba(255, 255, 255, 0.4);
 }
-
 .bubble.middle {
   transform: translateY(0);
   opacity: 1;
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+  pointer-events: auto;
 }
-
 .bubble.top {
   transform: translateY(-120%);
   opacity: 0.5;
 }
-
 .bubble.bottom {
   transform: translateY(120%);
   opacity: 0.5;

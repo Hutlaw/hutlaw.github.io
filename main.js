@@ -1,19 +1,15 @@
 const bubbles = document.querySelectorAll('.bubble');
 let currentIndex = 0;
-
 const starsCanvas = document.getElementById('stars');
 const starsCtx = starsCanvas.getContext('2d');
 let stars = [];
 let touchStartY = 0;
 let touchEndY = 0;
-
 function resizeCanvas() {
   starsCanvas.width = window.innerWidth;
   starsCanvas.height = window.innerHeight;
 }
-
 function initializeBubbles() {
-  // Set the visible bubbles based on currentIndex.
   bubbles.forEach(bubble => {
     bubble.classList.remove('top', 'middle', 'bottom');
   });
@@ -23,7 +19,6 @@ function initializeBubbles() {
   bubbles[topIndex].classList.add('top');
   bubbles[bottomIndex].classList.add('bottom');
 }
-
 function rotateBubbles(direction) {
   bubbles.forEach(bubble => bubble.classList.remove('top', 'middle', 'bottom'));
   if (direction === 'down') {
@@ -37,7 +32,6 @@ function rotateBubbles(direction) {
   bubbles[topIndex].classList.add('top');
   bubbles[bottomIndex].classList.add('bottom');
 }
-
 function generateStars() {
   stars = [];
   for (let i = 0; i < 100; i++) {
@@ -46,11 +40,10 @@ function generateStars() {
       y: Math.random() * starsCanvas.height,
       size: Math.random() * 2,
       twinkle: Math.random() * Math.PI * 2,
-      speed: Math.random() * 0.05,
+      speed: Math.random() * 0.05
     });
   }
 }
-
 function drawStars() {
   starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
   stars.forEach(star => {
@@ -62,11 +55,9 @@ function drawStars() {
   });
   requestAnimationFrame(drawStars);
 }
-
 function handleTouchStart(event) {
   touchStartY = event.touches[0].clientY;
 }
-
 function handleTouchEnd(event) {
   touchEndY = event.changedTouches[0].clientY;
   const swipeDistance = touchStartY - touchEndY;
@@ -78,7 +69,6 @@ function handleTouchEnd(event) {
     }
   }
 }
-
 let scrollTimeout;
 window.addEventListener('wheel', (event) => {
   if (scrollTimeout) return;
@@ -87,15 +77,12 @@ window.addEventListener('wheel', (event) => {
     scrollTimeout = null;
   }, 500);
 });
-
 window.addEventListener('touchstart', handleTouchStart);
 window.addEventListener('touchend', handleTouchEnd);
-
 window.addEventListener('resize', () => {
   resizeCanvas();
   generateStars();
 });
-
 resizeCanvas();
 generateStars();
 drawStars();

@@ -21,13 +21,16 @@
     .radio-group label {margin-right:15px;cursor:pointer;}
     .time-inputs {margin-bottom:15px;}
     .time-inputs input, .time-inputs select {margin-right:10px;padding:5px;font-size:14px;border:none;border-radius:4px;}
-    .preview-container {display:inline-block;margin:0 auto;padding:10px;border-radius:8px;position:relative;background:transparent;}
-    .discord-message {display:flex;align-items:flex-start;padding:15px;border-radius:8px;background:transparent;font-size:16px;line-height:1.4;box-sizing:border-box;max-width:600px;}
+    .reply-controls {margin-bottom:15px;padding:10px;border:1px solid #72767d;border-radius:4px;background:rgba(0,0,0,0.2);display:none;}
+    .preview-container {display:inline-block;margin:0 auto;padding:10px;border-radius:8px;position:relative;background:transparent;max-width:fit-content;}
+    .discord-message {display:flex;align-items:flex-start;padding:15px;border-radius:8px;background:transparent;font-size:16px;line-height:1.4;box-sizing:border-box;max-width:600px;overflow-wrap:break-word;}
     .discord-message .avatar {flex-shrink:0;width:48px;height:48px;border-radius:50%;margin-right:12px;object-fit:cover;background:#ccc;}
-    .discord-message .message-content {flex-grow:1;word-wrap:break-word;max-width:600px;}
+    .discord-message .message-content {flex-grow:1;max-width:600px;}
     .discord-message .username {font-weight:600;margin-right:8px;}
     .discord-message .timestamp {color:#72767d;font-size:12px;}
     .discord-message .message-text {margin-top:4px;white-space:pre-wrap;}
+    .reply-container {border-left:3px solid #72767d;padding-left:10px;margin-bottom:10px;}
+    .reply-container .reply-username {font-weight:600;margin-right:8px;}
     .export-btn {display:block;margin:20px auto;padding:10px 20px;background:#7289da;color:#fff;border:none;border-radius:4px;font-size:16px;cursor:pointer;}
     .bg-gray {background-color:#1C1D23;}
     .bg-midnight {background-color:#000000;}
@@ -73,12 +76,31 @@
         <option value="PM">PM</option>
       </select>
     </div>
-    <label for="pingMessage">Ping Message (simulate viewer ping):</label>
+    <label for="pingMessage">Ping Message (change bubble background):</label>
     <input type="checkbox" id="pingMessage">
     <label for="messageInput">Message:</label>
     <textarea id="messageInput" rows="5">Type your message. To format mentions, enclose text in << and >>.</textarea>
+    <label for="enableReply">Enable Reply:</label>
+    <input type="checkbox" id="enableReply">
+    <div id="replyControls" class="reply-controls">
+      <label for="replyPfpInput">Reply Profile Picture:</label>
+      <input type="file" id="replyPfpInput" accept="image/*">
+      <label for="replyUsernameInput">Reply Username:</label>
+      <input type="text" id="replyUsernameInput" placeholder="Enter reply username" value="ReplyUser">
+      <label for="replyUsernameColor">Reply Username Color (Wheel):</label>
+      <input type="color" id="replyUsernameColor" value="#ff0000">
+      <label for="replyUsernameColorText">Reply Username Color (Hex):</label>
+      <input type="text" id="replyUsernameColorText" value="#ff0000">
+      <label for="replyMessageInput">Reply Message:</label>
+      <textarea id="replyMessageInput" rows="3">This is a reply.</textarea>
+    </div>
   </div>
   <div id="previewArea" class="preview-container bg-gray">
+    <div id="replyPreview" class="reply-container" style="display:none;">
+      <img id="replyAvatarPreview" class="avatar" src="" alt="Reply Avatar" style="width:32px;height:32px;margin-right:8px;">
+      <span id="replyUsernamePreview" class="reply-username">ReplyUser</span>
+      <span id="replyMessagePreview" class="message-text"></span>
+    </div>
     <div class="discord-message">
       <img id="avatarPreview" class="avatar" src="" alt="Avatar">
       <div class="message-content">
@@ -101,8 +123,18 @@
       var cw = document.getElementById('usernameColor'), ct = document.getElementById('usernameColorText');
       if(/^#([0-9A-F]{3}){1,2}$/i.test(ct.value)) { cw.value = ct.value; }
     }
+    function syncReplyUsernameColor() {
+      var cw = document.getElementById('replyUsernameColor'), ct = document.getElementById('replyUsernameColorText');
+      ct.value = cw.value;
+    }
+    function syncReplyUsernameColorText() {
+      var cw = document.getElementById('replyUsernameColor'), ct = document.getElementById('replyUsernameColorText');
+      if(/^#([0-9A-F]{3}){1,2}$/i.test(ct.value)) { cw.value = ct.value; }
+    }
     document.getElementById('usernameColor').addEventListener('input', function(){syncUsernameColor(); updatePreview();});
     document.getElementById('usernameColorText').addEventListener('input', function(){syncUsernameColorText(); updatePreview();});
+    document.getElementById('replyUsernameColor').addEventListener('input', function(){syncReplyUsernameColor(); updatePreview();});
+    document.getElementById('replyUsernameColorText').addEventListener('input', function(){syncReplyUsernameColorText(); updatePreview();});
     function convertMentions(text, bg) {
       var mBg, mText;
       if(bg === "#000000"){ mBg = "#29274C"; mText = "#CACCFC"; }
@@ -122,6 +154,29 @@
       document.getElementById('todayInputs').style.display = (opt==="custom") ? "none" : "block";
       document.getElementById('customInputs').style.display = (opt==="custom") ? "block" : "none";
     }
+    function updateReplyPreview() {
+      var enable = document.getElementById('enableReply').checked;
+      var replyContainer = document.getElementById('replyPreview');
+      if(!enable) { replyContainer.style.display = "none"; return; }
+      replyContainer.style.display = "block";
+      var rpfp = document.getElementById('replyPfpInput'), rav = document.getElementById('replyAvatarPreview');
+      if(rpfp.files && rpfp.files[0]){
+        var r = new FileReader();
+        r.onload = function(e){ rav.src = e.target.result; updatePreview(); }
+        r.readAsDataURL(rpfp.files[0]);
+      } else { rav.src = 'https://via.placeholder.com/32'; }
+      var runame = document.getElementById('replyUsernameInput').value || "ReplyUser";
+      var rucolor = document.getElementById('replyUsernameColor').value;
+      document.getElementById('replyUsernamePreview').textContent = runame;
+      document.getElementById('replyUsernamePreview').style.color = rucolor;
+      var rmsg = document.getElementById('replyMessageInput').value;
+      document.getElementById('replyMessagePreview').innerHTML = convertMentions(rmsg, getCurrentBg());
+    }
+    function getCurrentBg() {
+      var bgRadios = document.getElementsByName('bgMode'), bg = "#1C1D23";
+      Array.prototype.forEach.call(bgRadios, function(r){ if(r.checked) bg = r.value; });
+      return bg;
+    }
     function updatePreview() {
       var pfp = document.getElementById('pfpInput'), av = document.getElementById('avatarPreview');
       if(pfp.files && pfp.files[0]){
@@ -133,8 +188,7 @@
           ucolor = document.getElementById('usernameColor').value;
       document.getElementById('usernamePreview').textContent = uname;
       document.getElementById('usernamePreview').style.color = ucolor;
-      var bgRadios = document.getElementsByName('bgMode'), bg = "#1C1D23";
-      Array.prototype.forEach.call(bgRadios, function(r){ if(r.checked) bg = r.value; });
+      var bg = getCurrentBg();
       var prev = document.getElementById('previewArea');
       prev.classList.remove('bg-gray','bg-midnight','bg-light');
       if(bg==="#1C1D23"){ prev.classList.add('bg-gray'); }
@@ -146,12 +200,15 @@
       var msgText = document.getElementById('messagePreview');
       if(bg==="#ffffff"){ msgText.style.color = "#000"; }
       else { msgText.style.color = "#fff"; }
-      var bubble = document.querySelector('.discord-message');
       if(document.getElementById('pingMessage').checked){
+        var bubble = document.querySelector('.discord-message');
         if(bg==="#000000"){ bubble.style.backgroundColor = "#130F04"; }
         else if(bg==="#1C1D23"){ bubble.style.backgroundColor = "#2E2A25"; }
         else if(bg==="#ffffff"){ bubble.style.backgroundColor = "#FDF7EA"; }
-      } else { bubble.style.backgroundColor = "transparent"; }
+      } else {
+        document.querySelector('.discord-message').style.backgroundColor = "transparent";
+      }
+      updateReplyPreview();
     }
     document.getElementById('pfpInput').addEventListener('change', updatePreview);
     document.getElementById('usernameInput').addEventListener('input', updatePreview);
@@ -166,6 +223,16 @@
     document.getElementById('timeCustom').addEventListener('input', updatePreview);
     document.getElementById('ampmCustom').addEventListener('change', updatePreview);
     document.getElementById('pingMessage').addEventListener('change', updatePreview);
+    document.getElementById('enableReply').addEventListener('change', function(){
+      var rc = document.getElementById('replyControls');
+      rc.style.display = this.checked ? "block" : "none";
+      updatePreview();
+    });
+    document.getElementById('replyPfpInput').addEventListener('change', updatePreview);
+    document.getElementById('replyUsernameInput').addEventListener('input', updatePreview);
+    document.getElementById('replyUsernameColor').addEventListener('input', function(){syncReplyUsernameColor(); updatePreview();});
+    document.getElementById('replyUsernameColorText').addEventListener('input', function(){syncReplyUsernameColorText(); updatePreview();});
+    document.getElementById('replyMessageInput').addEventListener('input', updatePreview);
     updatePreview();
     document.getElementById('exportBtn').addEventListener('click', function(){
       var prev = document.getElementById('previewArea'), clone = prev.cloneNode(true);

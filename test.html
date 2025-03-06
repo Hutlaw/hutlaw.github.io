@@ -23,14 +23,17 @@
     .time-inputs input, .time-inputs select {margin-right:10px;padding:5px;font-size:14px;border:none;border-radius:4px;}
     .reply-controls {margin-bottom:15px;padding:10px;border:1px solid #72767d;border-radius:4px;background:rgba(0,0,0,0.2);display:none;}
     .preview-container {display:inline-block;margin:0 auto;padding:10px;border-radius:8px;position:relative;background:transparent;max-width:fit-content;}
-    .discord-message {display:flex;align-items:flex-start;padding:15px;border-radius:8px;background:transparent;font-size:16px;line-height:1.4;box-sizing:border-box;max-width:600px;overflow-wrap:break-word;}
+    .discord-message {display:flex;align-items:flex-start;padding:15px;border-radius:8px;background:transparent;font-size:16px;line-height:1.4;box-sizing:border-box;max-width:600px;overflow-wrap:break-word;position:relative;}
     .discord-message .avatar {flex-shrink:0;width:48px;height:48px;border-radius:50%;margin-right:12px;object-fit:cover;background:#ccc;}
     .discord-message .message-content {flex-grow:1;max-width:600px;}
     .discord-message .username {font-weight:600;margin-right:8px;}
     .discord-message .timestamp {color:#72767d;font-size:12px;}
     .discord-message .message-text {margin-top:4px;white-space:pre-wrap;}
-    .reply-container {border-left:3px solid #72767d;padding-left:10px;margin-bottom:10px;}
-    .reply-container .reply-username {font-weight:600;margin-right:8px;}
+    .reply-container {position:relative;padding-left:40px;margin-bottom:10px;border-left:2px solid #72767d;}
+    .reply-container::before {content:"";position:absolute;left:0;top:0;width:20px;height:40px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='40'><path d='M10,5 Q0,20 10,35' stroke='%2372767d' stroke-width='2' fill='none'/></svg>");background-repeat:no-repeat;}
+    .reply-container .reply-avatar {width:32px;height:32px;border-radius:50%;margin-right:8px;object-fit:cover;background:#ccc;vertical-align:middle;}
+    .reply-container .reply-username {font-weight:600;vertical-align:middle;margin-right:8px;}
+    .reply-container .reply-message {display:inline-block;vertical-align:middle;}
     .export-btn {display:block;margin:20px auto;padding:10px 20px;background:#7289da;color:#fff;border:none;border-radius:4px;font-size:16px;cursor:pointer;}
     .bg-gray {background-color:#1C1D23;}
     .bg-midnight {background-color:#000000;}
@@ -97,9 +100,9 @@
   </div>
   <div id="previewArea" class="preview-container bg-gray">
     <div id="replyPreview" class="reply-container" style="display:none;">
-      <img id="replyAvatarPreview" class="avatar" src="" alt="Reply Avatar" style="width:32px;height:32px;margin-right:8px;">
+      <img id="replyAvatarPreview" class="reply-avatar" src="" alt="Reply Avatar">
       <span id="replyUsernamePreview" class="reply-username">ReplyUser</span>
-      <span id="replyMessagePreview" class="message-text"></span>
+      <span id="replyMessagePreview" class="reply-message"></span>
     </div>
     <div class="discord-message">
       <img id="avatarPreview" class="avatar" src="" alt="Avatar">
@@ -230,8 +233,6 @@
     });
     document.getElementById('replyPfpInput').addEventListener('change', updatePreview);
     document.getElementById('replyUsernameInput').addEventListener('input', updatePreview);
-    document.getElementById('replyUsernameColor').addEventListener('input', function(){syncReplyUsernameColor(); updatePreview();});
-    document.getElementById('replyUsernameColorText').addEventListener('input', function(){syncReplyUsernameColorText(); updatePreview();});
     document.getElementById('replyMessageInput').addEventListener('input', updatePreview);
     updatePreview();
     document.getElementById('exportBtn').addEventListener('click', function(){

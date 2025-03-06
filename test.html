@@ -13,14 +13,18 @@
     .controls {max-width: 800px; margin: 0 auto 30px; padding: 20px; background: #23272a; border-radius: 8px;}
     .controls label {display: block; margin-bottom: 5px; font-weight: 600;}
     .controls input[type="text"], .controls textarea {width: 100%; padding: 8px; border: none; border-radius: 4px; margin-bottom: 15px; font-family: inherit;}
-    .controls input[type="color"] {margin-bottom: 15px; height: 40px; width: 100%; border: none; padding: 0;}
+    .controls input[type="color"] {margin-bottom: 15px; height: 40px; width: 100%; border: none; padding: 0; -webkit-appearance: none; border-radius: 0;}
+    .controls input[type="color"]::-webkit-color-swatch-wrapper {padding: 0; border-radius: 0;}
+    .controls input[type="color"]::-webkit-color-swatch {border: none; border-radius: 0;}
     .controls input[type="file"] {margin-bottom: 15px;}
     .radio-group {margin-bottom: 15px;}
     .radio-group label {margin-right: 15px; cursor: pointer;}
-    .preview-container {max-width: 800px; margin: 0 auto; padding: 20px; border-radius: 8px; position: relative;}
-    .discord-message {display: flex; align-items: flex-start; padding: 15px; border-radius: 8px; background: transparent; font-size: 16px; line-height: 1.4;}
+    .time-inputs {margin-bottom:15px;}
+    .time-inputs input, .time-inputs select {margin-right: 10px; padding: 5px; font-size: 14px; border: none; border-radius: 4px;}
+    .preview-container {display: inline-block; margin: 0 auto; padding: 10px; border-radius: 8px; position: relative; background: transparent;}
+    .discord-message {display: flex; align-items: flex-start; padding: 15px; border-radius: 8px; background: transparent; font-size: 16px; line-height: 1.4; box-sizing: border-box;}
     .discord-message .avatar {flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; margin-right: 12px; object-fit: cover; background: #ccc;}
-    .discord-message .message-content {flex-grow: 1; word-wrap: break-word;}
+    .discord-message .message-content {flex-grow: 1; word-wrap: break-word; max-width: 600px;}
     .discord-message .username {font-weight: 600; margin-right: 8px;}
     .discord-message .timestamp {color: #72767d; font-size: 12px;}
     .discord-message .message-text {margin-top: 4px; white-space: pre-wrap;}
@@ -28,6 +32,7 @@
     .bg-gray {background-color: #1C1D23;}
     .bg-midnight {background-color: #000000;}
     .bg-light {background-color: #ffffff;}
+    .mention {padding: 0 4px; border-radius: 3px; font-weight: 500;}
   </style>
 </head>
 <body>
@@ -37,19 +42,41 @@
     <input type="file" id="pfpInput" accept="image/*">
     <label for="usernameInput">Username:</label>
     <input type="text" id="usernameInput" placeholder="Enter username" value="Username">
-    <label for="usernameColor">Username Color:</label>
+    <label for="usernameColor">Username Color (Wheel):</label>
     <input type="color" id="usernameColor" value="#00b0f4">
+    <label for="usernameColorText">Username Color (Hex):</label>
+    <input type="text" id="usernameColorText" value="#00b0f4">
     <label>Background Mode:</label>
     <div class="radio-group">
       <label><input type="radio" name="bgMode" value="#1C1D23" checked> Gray (#1C1D23)</label>
       <label><input type="radio" name="bgMode" value="#000000"> Midnight Black (#000000)</label>
       <label><input type="radio" name="bgMode" value="#ffffff"> Light Mode (#ffffff)</label>
     </div>
+    <label>Message Time:</label>
+    <div class="radio-group" id="timeOption">
+      <label><input type="radio" name="timeOption" value="today" checked> Today</label>
+      <label><input type="radio" name="timeOption" value="yesterday"> Yesterday</label>
+      <label><input type="radio" name="timeOption" value="custom"> Custom</label>
+    </div>
+    <div id="timeInputs">
+      <div id="todayInputs" class="time-inputs">
+        <input type="text" id="timeToday" placeholder="HH:MM" value="12:00">
+        <select id="ampmToday">
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+      <div id="customInputs" class="time-inputs" style="display:none;">
+        <input type="date" id="customDate">
+        <input type="text" id="timeCustom" placeholder="HH:MM" value="12:00">
+        <select id="ampmCustom">
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+    </div>
     <label for="messageInput">Message:</label>
-    <textarea id="messageInput" rows="5">Hello, world!
-This is a fake Discord message with inline code: code and a code snippet:
-console.log("Hello Discord!");
-Strikethrough and quoted text.</textarea>
+    <textarea id="messageInput" rows="5">Type your message. To format mentions, use <<@mention>> for normal mention and <<!@mention>> for pinged mention.</textarea>
   </div>
   <div id="previewArea" class="preview-container bg-gray">
     <div class="discord-message">
@@ -57,7 +84,7 @@ Strikethrough and quoted text.</textarea>
       <div class="message-content">
         <div>
           <span id="usernamePreview" class="username">Username</span>
-          <span class="timestamp">Today at 12:00 PM</span>
+          <span id="timestampPreview" class="timestamp">Today at 12:00 AM</span>
         </div>
         <div id="messagePreview" class="message-text"></div>
       </div>
@@ -66,49 +93,98 @@ Strikethrough and quoted text.</textarea>
   <button id="exportBtn" class="export-btn">Export Message as PNG</button>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
+    function syncUsernameColor() {
+      var colorWheel = document.getElementById('usernameColor');
+      var colorText = document.getElementById('usernameColorText');
+      colorText.value = colorWheel.value;
+    }
+    function syncUsernameColorText() {
+      var colorWheel = document.getElementById('usernameColor');
+      var colorText = document.getElementById('usernameColorText');
+      if(/^#([0-9A-F]{3}){1,2}$/i.test(colorText.value)) {
+        colorWheel.value = colorText.value;
+      }
+    }
+    document.getElementById('usernameColor').addEventListener('input', syncUsernameColor);
+    document.getElementById('usernameColorText').addEventListener('input', syncUsernameColorText);
+    function convertMentions(text, bgColor) {
+      var mentionNormalBg, mentionNormalText, mentionPingBg;
+      if(bgColor === "#000000") { mentionNormalBg = "#29274C"; mentionNormalText = "#CACCFC"; mentionPingBg = "#130F04"; }
+      else if(bgColor === "#1C1D23") { mentionNormalBg = "#3B3B63"; mentionNormalText = "#C9CDFB"; mentionPingBg = "#2E2A25"; }
+      else if(bgColor === "#ffffff") { mentionNormalBg = "#E7E9FD"; mentionNormalText = "#525EDC"; mentionPingBg = "#FDF7EA"; }
+      return text.replace(/<<(!?@[\s\S]+?)>>/g, function(match, p1) {
+        var isPing = false;
+        var mentionText = p1;
+        if(mentionText.indexOf("!@") === 0) { isPing = true; mentionText = mentionText.slice(2); }
+        else if(mentionText.indexOf("@") === 0) { mentionText = mentionText.slice(1); }
+        var bg = isPing ? mentionPingBg : mentionNormalBg;
+        var color = mentionNormalText;
+        return '<span class="mention" style="background-color:'+bg+'; color:'+color+';">'+mentionText.trim()+'</span>';
+      });
+    }
+    function updateTimeDisplay(bgColor) {
+      var timeOption = document.querySelector('input[name="timeOption"]:checked').value;
+      var timeStr = "";
+      if(timeOption === "today") { timeStr = "Today at " + document.getElementById('timeToday').value + " " + document.getElementById('ampmToday').value; }
+      else if(timeOption === "yesterday") { timeStr = "Yesterday at " + document.getElementById('timeToday').value + " " + document.getElementById('ampmToday').value; }
+      else { var dateVal = document.getElementById('customDate').value; if(dateVal === "") dateVal = "Custom Date"; timeStr = dateVal + " at " + document.getElementById('timeCustom').value + " " + document.getElementById('ampmCustom').value; }
+      document.getElementById('timestampPreview').textContent = timeStr;
+    }
+    function updateTimeInputs() {
+      var timeOption = document.querySelector('input[name="timeOption"]:checked').value;
+      document.getElementById('todayInputs').style.display = (timeOption === "custom") ? "none" : "block";
+      document.getElementById('customInputs').style.display = (timeOption === "custom") ? "block" : "none";
+    }
     function updatePreview() {
       var pfpInput = document.getElementById('pfpInput');
       var avatarPreview = document.getElementById('avatarPreview');
-      if (pfpInput.files && pfpInput.files[0]) {
+      if(pfpInput.files && pfpInput.files[0]) {
         var reader = new FileReader();
-        reader.onload = function(e) {
-          avatarPreview.src = e.target.result;
-        }
+        reader.onload = function(e) { avatarPreview.src = e.target.result; }
         reader.readAsDataURL(pfpInput.files[0]);
-      } else {
-        avatarPreview.src = 'https://via.placeholder.com/48';
-      }
+      } else { avatarPreview.src = 'https://via.placeholder.com/48'; }
       var username = document.getElementById('usernameInput').value || "Username";
       var usernameColor = document.getElementById('usernameColor').value;
       document.getElementById('usernamePreview').textContent = username;
       document.getElementById('usernamePreview').style.color = usernameColor;
       var bgRadios = document.getElementsByName('bgMode');
       var bgColor = "#1C1D23";
-      Array.prototype.forEach.call(bgRadios, function(radio) {
-        if (radio.checked) bgColor = radio.value;
-      });
+      Array.prototype.forEach.call(bgRadios, function(radio) { if(radio.checked) bgColor = radio.value; });
       var previewArea = document.getElementById('previewArea');
       previewArea.classList.remove('bg-gray','bg-midnight','bg-light');
-      if (bgColor === "#1C1D23") { previewArea.classList.add('bg-gray'); }
-      else if (bgColor === "#000000") { previewArea.classList.add('bg-midnight'); }
-      else if (bgColor === "#ffffff") { previewArea.classList.add('bg-light'); }
-      var messageText = document.getElementById('messagePreview');
-      if (bgColor === "#ffffff") { messageText.style.color = "#000"; }
-      else { messageText.style.color = "#fff"; }
+      if(bgColor === "#1C1D23") { previewArea.classList.add('bg-gray'); }
+      else if(bgColor === "#000000") { previewArea.classList.add('bg-midnight'); }
+      else if(bgColor === "#ffffff") { previewArea.classList.add('bg-light'); }
+      updateTimeDisplay(bgColor);
       var rawMessage = document.getElementById('messageInput').value;
-      messageText.textContent = rawMessage;
+      document.getElementById('messagePreview').innerHTML = convertMentions(rawMessage, bgColor);
     }
     document.getElementById('pfpInput').addEventListener('change', updatePreview);
     document.getElementById('usernameInput').addEventListener('input', updatePreview);
     document.getElementById('usernameColor').addEventListener('input', updatePreview);
+    document.getElementById('usernameColorText').addEventListener('input', updatePreview);
     document.getElementById('messageInput').addEventListener('input', updatePreview);
-    var radios = document.getElementsByName('bgMode');
-    Array.prototype.forEach.call(radios, function(radio) {
-      radio.addEventListener('change', updatePreview);
-    });
+    var bgRadios = document.getElementsByName('bgMode');
+    Array.prototype.forEach.call(bgRadios, function(radio) { radio.addEventListener('change', updatePreview); });
+    var timeOptions = document.getElementsByName('timeOption');
+    Array.prototype.forEach.call(timeOptions, function(radio) { radio.addEventListener('change', function() { updateTimeInputs(); updatePreview(); }); });
+    document.getElementById('timeToday').addEventListener('input', updatePreview);
+    document.getElementById('ampmToday').addEventListener('change', updatePreview);
+    document.getElementById('customDate').addEventListener('input', updatePreview);
+    document.getElementById('timeCustom').addEventListener('input', updatePreview);
+    document.getElementById('ampmCustom').addEventListener('change', updatePreview);
     updatePreview();
     document.getElementById('exportBtn').addEventListener('click', function() {
-      html2canvas(document.getElementById('previewArea')).then(function(canvas) {
+      var preview = document.getElementById('previewArea');
+      var clone = preview.cloneNode(true);
+      clone.style.display = "inline-block";
+      clone.style.margin = "0";
+      clone.style.padding = "0";
+      clone.style.position = "absolute";
+      clone.style.top = "-9999px";
+      document.body.appendChild(clone);
+      html2canvas(clone).then(function(canvas) {
+        document.body.removeChild(clone);
         var link = document.createElement('a');
         link.download = 'discord-message.png';
         link.href = canvas.toDataURL();

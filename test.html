@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fake Discord Message Creator</title>
+  <style>
+    @font-face {font-family: 'gg sans'; src: url('fonts/gg sans Regular.ttf') format('truetype'); font-weight: 400; font-style: normal;}
+    @font-face {font-family: 'gg sans'; src: url('fonts/gg sans Medium.ttf') format('truetype'); font-weight: 500; font-style: normal;}
+    @font-face {font-family: 'gg sans'; src: url('fonts/gg sans Semibold.ttf') format('truetype'); font-weight: 600; font-style: normal;}
+    @font-face {font-family: 'gg sans'; src: url('fonts/gg sans Bold.ttf') format('truetype'); font-weight: 700; font-style: normal;}
+    body {background-color: #2C2F33; color: #fff; font-family: 'gg sans', sans-serif; padding: 20px; margin: 0;}
+    h1 {text-align: center; margin-bottom: 20px;}
+    .controls {max-width: 800px; margin: 0 auto 30px; padding: 20px; background: #23272a; border-radius: 8px;}
+    .controls label {display: block; margin-bottom: 5px; font-weight: 600;}
+    .controls input[type="text"], .controls textarea {width: 100%; padding: 8px; border: none; border-radius: 4px; margin-bottom: 15px; font-family: inherit;}
+    .controls input[type="color"] {margin-bottom: 15px; height: 40px; width: 100%; border: none; padding: 0;}
+    .controls input[type="file"] {margin-bottom: 15px;}
+    .radio-group {margin-bottom: 15px;}
+    .radio-group label {margin-right: 15px; cursor: pointer;}
+    .preview-container {max-width: 800px; margin: 0 auto; padding: 20px; border-radius: 8px; position: relative;}
+    .discord-message {display: flex; align-items: flex-start; padding: 15px; border-radius: 8px; background: transparent; font-size: 16px; line-height: 1.4;}
+    .discord-message .avatar {flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; margin-right: 12px; object-fit: cover; background: #ccc;}
+    .discord-message .message-content {flex-grow: 1; word-wrap: break-word;}
+    .discord-message .username {font-weight: 600; margin-right: 8px;}
+    .discord-message .timestamp {color: #72767d; font-size: 12px;}
+    .discord-message .message-text {margin-top: 4px; white-space: pre-wrap;}
+    .export-btn {display: block; margin: 20px auto; padding: 10px 20px; background: #7289da; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
+    .bg-gray {background-color: #1C1D23;}
+    .bg-midnight {background-color: #000000;}
+    .bg-light {background-color: #ffffff;}
+  </style>
+</head>
+<body>
+  <h1>Fake Discord Message Creator</h1>
+  <div class="controls">
+    <label for="pfpInput">Profile Picture:</label>
+    <input type="file" id="pfpInput" accept="image/*">
+    <label for="usernameInput">Username:</label>
+    <input type="text" id="usernameInput" placeholder="Enter username" value="Username">
+    <label for="usernameColor">Username Color:</label>
+    <input type="color" id="usernameColor" value="#00b0f4">
+    <label>Background Mode:</label>
+    <div class="radio-group">
+      <label><input type="radio" name="bgMode" value="#1C1D23" checked> Gray (#1C1D23)</label>
+      <label><input type="radio" name="bgMode" value="#000000"> Midnight Black (#000000)</label>
+      <label><input type="radio" name="bgMode" value="#ffffff"> Light Mode (#ffffff)</label>
+    </div>
+    <label for="messageInput">Message:</label>
+    <textarea id="messageInput" rows="5">Hello, world!
+This is a fake Discord message with inline code: code and a code snippet:
+console.log("Hello Discord!");
+Strikethrough and quoted text.</textarea>
+  </div>
+  <div id="previewArea" class="preview-container bg-gray">
+    <div class="discord-message">
+      <img id="avatarPreview" class="avatar" src="" alt="Avatar">
+      <div class="message-content">
+        <div>
+          <span id="usernamePreview" class="username">Username</span>
+          <span class="timestamp">Today at 12:00 PM</span>
+        </div>
+        <div id="messagePreview" class="message-text"></div>
+      </div>
+    </div>
+  </div>
+  <button id="exportBtn" class="export-btn">Export Message as PNG</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    function updatePreview() {
+      var pfpInput = document.getElementById('pfpInput');
+      var avatarPreview = document.getElementById('avatarPreview');
+      if (pfpInput.files && pfpInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          avatarPreview.src = e.target.result;
+        }
+        reader.readAsDataURL(pfpInput.files[0]);
+      } else {
+        avatarPreview.src = 'https://via.placeholder.com/48';
+      }
+      var username = document.getElementById('usernameInput').value || "Username";
+      var usernameColor = document.getElementById('usernameColor').value;
+      document.getElementById('usernamePreview').textContent = username;
+      document.getElementById('usernamePreview').style.color = usernameColor;
+      var bgRadios = document.getElementsByName('bgMode');
+      var bgColor = "#1C1D23";
+      Array.prototype.forEach.call(bgRadios, function(radio) {
+        if (radio.checked) bgColor = radio.value;
+      });
+      var previewArea = document.getElementById('previewArea');
+      previewArea.classList.remove('bg-gray','bg-midnight','bg-light');
+      if (bgColor === "#1C1D23") { previewArea.classList.add('bg-gray'); }
+      else if (bgColor === "#000000") { previewArea.classList.add('bg-midnight'); }
+      else if (bgColor === "#ffffff") { previewArea.classList.add('bg-light'); }
+      var messageText = document.getElementById('messagePreview');
+      if (bgColor === "#ffffff") { messageText.style.color = "#000"; }
+      else { messageText.style.color = "#fff"; }
+      var rawMessage = document.getElementById('messageInput').value;
+      messageText.textContent = rawMessage;
+    }
+    document.getElementById('pfpInput').addEventListener('change', updatePreview);
+    document.getElementById('usernameInput').addEventListener('input', updatePreview);
+    document.getElementById('usernameColor').addEventListener('input', updatePreview);
+    document.getElementById('messageInput').addEventListener('input', updatePreview);
+    var radios = document.getElementsByName('bgMode');
+    Array.prototype.forEach.call(radios, function(radio) {
+      radio.addEventListener('change', updatePreview);
+    });
+    updatePreview();
+    document.getElementById('exportBtn').addEventListener('click', function() {
+      html2canvas(document.getElementById('previewArea')).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'discord-message.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>

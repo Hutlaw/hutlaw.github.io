@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake Discord Message Creator</title>
+  <link rel="stylesheet" href="fdm.css">
+</head>
+<body>
+  <h1>Fake Discord Message Creator</h1>
+  <div class="controls">
+    <label for="pfpInput">Profile Picture:</label>
+    <input type="file" id="pfpInput" accept="image/*">
+    <label for="usernameInput">Username:</label>
+    <input type="text" id="usernameInput" placeholder="Enter username" value="Username">
+    <label for="usernameColor">Username Color (Wheel):</label>
+    <input type="color" id="usernameColor" value="#00b0f4">
+    <label for="usernameColorText">Username Color (Hex):</label>
+    <input type="text" id="usernameColorText" value="#00b0f4">
+    <label>Background Mode:</label>
+    <div class="radio-group">
+      <label><input type="radio" name="bgMode" value="#1C1D23" checked> Gray (#1C1D23)</label>
+      <label><input type="radio" name="bgMode" value="#000000"> Midnight Black (#000000)</label>
+      <label><input type="radio" name="bgMode" value="#ffffff"> Light Mode (#ffffff)</label>
+    </div>
+    <label>Message Time:</label>
+    <div class="radio-group">
+      <label><input type="radio" name="timeOption" value="today" checked> Today</label>
+      <label><input type="radio" name="timeOption" value="yesterday"> Yesterday</label>
+      <label><input type="radio" name="timeOption" value="custom"> Custom</label>
+    </div>
+    <div class="time-inputs" id="todayInputs">
+      <input type="text" id="timeToday" placeholder="HH:MM" value="12:00">
+      <select id="ampmToday">
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+    <div class="time-inputs" id="customInputs" style="display:none;">
+      <input type="text" id="customDate" placeholder="dd/mm/yyyy or mm/dd/yyyy">
+      <input type="text" id="timeCustom" placeholder="HH:MM" value="12:00">
+      <select id="ampmCustom">
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+    <label for="pingMessage">Ping Message (change bubble background):</label>
+    <input type="checkbox" id="pingMessage">
+    <label for="messageInput">Message:</label>
+    <textarea id="messageInput" rows="5">Type your message. To format mentions, enclose text in << and >>.</textarea>
+    <label for="enableReply">Enable Reply: (currently broken)</label>
+    <input type="checkbox" id="enableReply">
+    <div id="replyControls" class="reply-controls">
+      <label for="replyPfpInput">Reply Profile Picture:</label>
+      <input type="file" id="replyPfpInput" accept="image/*">
+      <label for="replyUsernameInput">Reply Username:</label>
+      <input type="text" id="replyUsernameInput" placeholder="Enter reply username" value="ReplyUser">
+      <label for="replyUsernameColor">Reply Username Color (Wheel):</label>
+      <input type="color" id="replyUsernameColor" value="#ff0000">
+      <label for="replyUsernameColorText">Reply Username Color (Hex):</label>
+      <input type="text" id="replyUsernameColorText" value="#ff0000">
+      <label for="replyMessageInput">Reply Message:</label>
+      <textarea id="replyMessageInput" rows="3">This is a reply.</textarea>
+    </div>
+  </div>
+  <div id="previewArea" class="preview-container bg-gray">
+    <div id="replyPreview" class="reply-container" style="display:none;">
+      <img id="replyAvatarPreview" class="reply-avatar" src="" alt="Reply Avatar">
+      <span id="replyUsernamePreview" class="reply-username">ReplyUser</span>
+      <span id="replyMessagePreview" class="reply-message"></span>
+    </div>
+    <div class="discord-message">
+      <img id="avatarPreview" class="avatar" src="" alt="Avatar">
+      <div class="message-content">
+        <div>
+          <span id="usernamePreview" class="username">Username</span>
+          <span id="timestampPreview" class="timestamp">Today at 12:00 AM</span>
+        </div>
+        <div id="messagePreview" class="message-text"></div>
+      </div>
+    </div>
+  </div>
+  <button id="exportBtn" class="export-btn">Export Message as PNG</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="fdm.js"></script>
+</body>
+</html>

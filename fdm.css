@@ -20,9 +20,9 @@ h1 {text-align:center;margin-bottom:20px;}
 .discord-message {display:flex;align-items:flex-start;padding:15px;border-radius:8px;background:transparent;font-size:16px;line-height:1.4;box-sizing:border-box;max-width:600px;overflow-wrap:break-word;position:relative;}
 .discord-message .avatar {flex-shrink:0;width:48px;height:48px;border-radius:50%;margin-right:12px;object-fit:cover;background:#ccc;}
 .discord-message .message-content {flex-grow:1;max-width:600px;}
-.discord-message .username {font-weight:600;margin-right:8px;}
-.discord-message .timestamp {color:#72767d;font-size:12px;}
-.discord-message .message-text {margin-top:4px;white-space:pre-wrap;}
+.discord-message .username {font-weight:600;margin-right:4px;}
+.discord-message .timestamp {color:#72767d;font-size:10px;margin-left:2px;}
+.discord-message .message-text {margin-top:2px;white-space:pre-wrap;}
 .reply-container {position:relative;padding-left:40px;margin-bottom:10px;border-left:2px solid #72767d;}
 .reply-container::before {content:"";position:absolute;left:0;top:0;width:20px;height:40px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='40'><path d='M10,5 Q0,20 10,35' stroke='%2372767d' stroke-width='2' fill='none'/></svg>");background-repeat:no-repeat;}
 .reply-container .reply-avatar {width:32px;height:32px;border-radius:50%;margin-right:8px;object-fit:cover;background:#ccc;vertical-align:middle;}

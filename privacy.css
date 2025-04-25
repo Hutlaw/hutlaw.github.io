@@ -1,0 +1,99 @@
+{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(circle, #0c1445, #030716);
+  color: white;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2em;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 1em;
+}
+
+nav a.active,
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  width: 100%;
+  max-width: 800px;
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.content h2 {
+  margin: 15px 0 10px;
+  font-size: 1.5em;
+}
+
+.content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.content a {
+  color: lightblue;
+  text-decoration: underline;
+}
+
+footer {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.5em;
+  }
+  nav a {
+    font-size: 0.9em;
+  }
+  .content h2 {
+    font-size: 1.3em;
+  }
+}

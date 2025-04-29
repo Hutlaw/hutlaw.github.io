@@ -7,21 +7,23 @@
   <link rel="stylesheet" href="cgl.css">
 </head>
 <body>
-  <div class="controls">
+  <button id="menu-toggle" aria-label="Toggle menu">☰</button>
+  <div class="controls collapsed" id="controls">
     <button id="start">Start</button>
     <button id="pause">Pause</button>
     <button id="random">Random</button>
     <button id="clear">Clear</button>
     <label>Speed: <input id="speed" type="range" min="1" max="120" value="30"></label>
     <label>Cell Size: <input id="cellsize" type="range" min="4" max="32" value="12"></label>
-    <label>Hue Cycle (s): <input id="huespeed" type="range" min="5" max="120" value="40"></label>
-    <label>Glow Blur: <input id="glow" type="range" min="0" max="20" value="8"></label>
     <select id="pattern">
       <option value="toggle">Toggle Cells</option>
       <option value="glider">Glider</option>
       <option value="gun">Gosper Glider Gun</option>
       <option value="pulsar">Pulsar</option>
     </select>
+    <label><input type="checkbox" id="bloom-toggle" checked> Bloom</label>
+    <label>Gen: <span id="generation-count">0</span></label>
+    <label>Pop: <span id="population-count">0</span></label>
   </div>
   <canvas id="life"></canvas>
   <script src="cgl.js"></script>

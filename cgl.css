@@ -1,0 +1,87 @@
+:root {
+  --hue-speed: 40s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #111;
+  font-family: sans-serif;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  max-width: 100vw;
+  overflow-x: auto;
+  padding: 8px 4px;
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  z-index: 10;
+}
+.controls > * {
+  flex: 1 1 auto;
+  min-width: 80px;
+}
+
+.controls button,
+.controls label,
+.controls select {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.controls button:hover,
+.controls label:hover,
+.controls select:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.controls select {
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+}
+.controls select option {
+  background: #222;
+  color: #fff;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: cycle-hue var(--hue-speed) linear infinite;
+  background: hsl(0,20%,10%);
+  cursor: crosshair;
+}
+
+@keyframes cycle-hue {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+
+@media only screen and (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .controls > * {
+    width: 100%;
+  }
+}

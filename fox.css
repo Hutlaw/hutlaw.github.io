@@ -17,8 +17,8 @@ header {
   align-items: center;
   margin-bottom: 10px;
 }
-header h1 { font-size: 2em; }
-#settings-btn {
+.header-buttons button {
+  margin-left: 10px;
   padding: 5px 10px;
   font-size: 0.9em;
   cursor: pointer;
@@ -42,10 +42,7 @@ header h1 { font-size: 2em; }
   transition: background 0.3s, transform 0.3s;
   perspective: 1000px;
 }
-.cell.fixed {
-  background: rgba(255,255,255,0.2);
-  cursor: default;
-}
+.cell.fixed { background: rgba(255,255,255,0.2); cursor: default; }
 .cell.flip { animation: cellFlip 0.6s ease; }
 @keyframes cellFlip {
   0% { transform: rotateY(0deg); }
@@ -132,13 +129,23 @@ button {
 .modal-content a { color: lightblue; text-decoration: underline; }
 .modal-buttons { margin-top: 15px; }
 .modal-buttons button { margin: 0 5px; }
+.tutorial .tutorial-step {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+.tutorial .step-visual {
+  font-size: 2em;
+  margin-right: 15px;
+  text-align: center;
+}
 .fade { animation: fadeEffect 0.5s; }
 @keyframes fadeEffect { from { opacity: 0; } to { opacity: 1; } }
 footer {
   width: 100%;
   padding: 10px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.1);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -151,9 +158,6 @@ footer a {
 footer a:hover { text-decoration: underline; }
 @media (max-width: 600px) {
   header h1 { font-size: 1.5em; }
-  .tile {
-    width: 60px;
-    height: 60px;
-    font-size: 1.5em;
-  }
+  .tile { width: 60px; height: 60px; font-size: 1.5em; }
+  .tutorial .step-visual { font-size: 1.5em; margin-right: 10px; }
 }

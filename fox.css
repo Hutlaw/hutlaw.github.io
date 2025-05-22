@@ -38,7 +38,6 @@ header {
   justify-content: center;
   font-size: 2em;
   cursor: pointer;
-  position: relative;
   transition: background 0.3s, transform 0.3s;
   perspective: 1000px;
 }
@@ -129,18 +128,34 @@ button {
 .modal-content a { color: lightblue; text-decoration: underline; }
 .modal-buttons { margin-top: 15px; }
 .modal-buttons button { margin: 0 5px; }
+
 .tutorial .tutorial-step {
   display: flex;
   align-items: center;
   margin: 10px 0;
 }
-.tutorial .step-visual {
-  font-size: 2em;
+.tut-board {
+  display: grid;
+  grid-template-columns: repeat(3, 24px);
+  grid-auto-rows: 24px;
+  gap: 2px;
   margin-right: 15px;
-  text-align: center;
 }
+.tut-board.size-3 { grid-template-columns: repeat(3, 24px); }
+.tut-cell {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+}
+.tut-cell.fixed { background: rgba(255,255,255,0.2); }
+.spacer { grid-column: span 3; }
+
 .fade { animation: fadeEffect 0.5s; }
 @keyframes fadeEffect { from { opacity: 0; } to { opacity: 1; } }
+
 footer {
   width: 100%;
   padding: 10px;
@@ -156,8 +171,9 @@ footer a {
   margin: 0 5px;
 }
 footer a:hover { text-decoration: underline; }
+
 @media (max-width: 600px) {
   header h1 { font-size: 1.5em; }
   .tile { width: 60px; height: 60px; font-size: 1.5em; }
-  .tutorial .step-visual { font-size: 1.5em; margin-right: 10px; }
+  .tut-board { grid-template-columns: repeat(3, 18px); grid-auto-rows: 18px; gap: 2px; }
 }

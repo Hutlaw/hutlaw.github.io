@@ -32,16 +32,26 @@
     <div class="modal-content tutorial">
       <h2>How to Play</h2>
       <div class="tutorial-step">
-        <div class="step-visual">🟦🟦🟦<br>🟦🅾️🟦<br>🟦🟦🟦</div>
-        <p>Place tiles without spelling “FOX” or “XOF” in any row, column, or diagonal.</p>
+        <div class="tut-board size-3">
+          <div class="tut-cell"></div><div class="tut-cell"></div><div class="tut-cell"></div>
+          <div class="tut-cell"></div><div class="tut-cell fixed">O</div><div class="tut-cell"></div>
+          <div class="tut-cell"></div><div class="tut-cell"></div><div class="tut-cell"></div>
+        </div>
+        <p>Place tiles so you never form “FOX” or “XOF” in any row, column, or diagonal.</p>
       </div>
       <div class="tutorial-step">
-        <div class="step-visual">❓➡️🅾️➡️❌</div>
-        <p>“O” in the middle of “F” and “X” loses the game.</p>
+        <div class="tut-board size-3">
+          <div class="tut-cell">F</div><div class="tut-cell"></div><div class="tut-cell">X</div>
+          <div class="spacer" style="grid-column: span 3; height: 0;"></div>
+        </div>
+        <p>An <strong>O</strong> placed between <strong>F</strong> and <strong>X</strong> loses the game.</p>
       </div>
       <div class="tutorial-step">
-        <div class="step-visual">✅ 🆚 ❌</div>
-        <p>If you fill the board with no “FOX” sequences, you win.</p>
+        <div class="tut-board size-3">
+          <div class="tut-cell">X</div><div class="tut-cell">F</div><div class="tut-cell">O</div>
+          <div class="spacer" style="grid-column: span 3; height: 0;"></div>
+        </div>
+        <p>Fill the board without any “FOX” sequences to win.</p>
       </div>
       <button id="close-tutorial">Got it!</button>
     </div>

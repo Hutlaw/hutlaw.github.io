@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Don't Find the Fox</title>
-  <link rel="stylesheet" href="fox.css">
+  <link rel="stylesheet" href="fox.css"/>
 </head>
 <body>
   <header>
@@ -27,36 +27,29 @@
       <button id="hint">Hint (<span id="hint-charges"></span>)</button>
     </div>
   </div>
-
   <div id="tutorial-popup" class="modal" style="display:none;">
     <div class="modal-content tutorial">
       <h2>How to Play</h2>
       <div class="tutorial-step">
-        <div class="tut-board size-3">
-          <div class="tut-cell"></div><div class="tut-cell"></div><div class="tut-cell"></div>
-          <div class="tut-cell"></div><div class="tut-cell fixed">O</div><div class="tut-cell"></div>
-          <div class="tut-cell"></div><div class="tut-cell"></div><div class="tut-cell"></div>
-        </div>
-        <p>Place tiles so you never form “FOX” or “XOF” in any row, column, or diagonal.</p>
+        <table class="tut-table">
+          <tr><td></td><td>O</td><td></td></tr>
+          <tr><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td></tr>
+        </table>
+        <p>Never place tiles so that <code>F-O-X</code> appears in any row, column, or diagonal.</p>
       </div>
       <div class="tutorial-step">
-        <div class="tut-board size-3">
-          <div class="tut-cell">F</div><div class="tut-cell"></div><div class="tut-cell">X</div>
-          <div class="spacer" style="grid-column: span 3; height: 0;"></div>
-        </div>
-        <p>An <strong>O</strong> placed between <strong>F</strong> and <strong>X</strong> loses the game.</p>
+        <table class="tut-table">
+          <tr><td>F</td><td>O</td><td>X</td></tr>
+        </table>
+        <p>This exact sequence loses the game.</p>
       </div>
       <div class="tutorial-step">
-        <div class="tut-board size-3">
-          <div class="tut-cell">X</div><div class="tut-cell">F</div><div class="tut-cell">O</div>
-          <div class="spacer" style="grid-column: span 3; height: 0;"></div>
-        </div>
-        <p>Fill the board without any “FOX” sequences to win.</p>
+        <p>Fill all cells without creating <code>FOX</code> or <code>XOF</code> to win.</p>
       </div>
       <button id="close-tutorial">Got it!</button>
     </div>
   </div>
-
   <div id="settings-popup" class="modal" style="display:none;">
     <div class="modal-content">
       <h2>Game Settings</h2>
@@ -68,16 +61,13 @@
         <option value="6">6×6</option>
       </select>
       <br>
-      <label>
-        <input type="checkbox" id="abilities-toggle"> Enable Abilities
-      </label>
+      <label><input type="checkbox" id="abilities-toggle"/> Enable Abilities</label>
       <div class="modal-buttons">
         <button id="save-settings">Save</button>
         <button id="cancel-settings">Cancel</button>
       </div>
     </div>
   </div>
-
   <div id="cookie-popup" class="modal" style="display:none;">
     <div class="modal-content">
       <p>This site uses cookies for analytics and to enhance your experience. Please see our <a href="http://hutlaw.xyz/privacy" target="_blank">privacy policy</a>.</p>
@@ -87,7 +77,6 @@
       </div>
     </div>
   </div>
-
   <footer>
     <a href="http://hutlaw.xyz" target="_blank">Main</a>
     <span> | </span>
@@ -95,7 +84,6 @@
     <span> | </span>
     <a href="http://hutlaw.xyz/privacy" target="_blank">privacy</a>
   </footer>
-
   <script src="fox.js"></script>
 </body>
 </html>

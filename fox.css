@@ -113,7 +113,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
 }
 .modal-content {
   background: #222;
@@ -151,21 +150,20 @@ button {
 .fade { animation: fadeEffect 0.5s; }
 @keyframes fadeEffect { from{opacity:0} to{opacity:1} }
 footer {
-  width:100%;
-  padding:10px;
-  text-align:center;
-  background:rgba(255,255,255,0.1);
-  position:absolute;
-  bottom:0;left:0;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+  position: absolute; bottom: 0; left: 0;
 }
 footer a {
-  color:white;
-  text-decoration:none;
-  margin:0 5px;
+  color: white;
+  text-decoration: none;
+  margin: 0 5px;
 }
-footer a:hover { text-decoration:underline; }
+footer a:hover { text-decoration: underline; }
 @media(max-width:600px){
-  header h1{font-size:1.5em}
-  .tile{width:60px;height:60px;font-size:1.5em}
-  .tut-table td{width:18px;height:18px}
+  header h1 { font-size: 1.5em; }
+  .tile { width: 60px; height: 60px; font-size: 1.5em; }
+  .tut-table td { width: 18px; height: 18px; }
 }

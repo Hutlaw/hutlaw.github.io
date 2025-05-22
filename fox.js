@@ -1,8 +1,8 @@
-let boardSize, abilitiesEnabled;
-let attempts, wins;
-let scoreKeyAttempts, scoreKeyWins;
-const abilityChargesMapping = {3:1,4:2,5:3,6:4};
-let revealCharges, removeCharges, hintCharges;
+let boardSize,abilitiesEnabled;
+let attempts,wins;
+let scoreKeyAttempts,scoreKeyWins;
+const abilityChargesMapping={3:1,4:2,5:3,6:4};
+let revealCharges,removeCharges,hintCharges;
 let removeMode=false;
 let board=[];
 let selectedTile=null;
@@ -36,11 +36,13 @@ function updateScoreKeys(){
   scoreKeyWins=`wins_${boardSize}_${abilitiesEnabled}`;
 }
 function getCellSize(){
-  return {3:100,4:80,5:60,6:50}[boardSize];
+  return{3:100,4:80,5:60,6:50}[boardSize];
 }
 function initBoard(){
-  board=[];const be=document.getElementById("board");
-  be.innerHTML="";const size=getCellSize();
+  board=[];
+  const be=document.getElementById("board");
+  be.innerHTML="";
+  const size=getCellSize();
   be.style.gridTemplateColumns=`repeat(${boardSize},${size}px)`;
   for(let r=0;r<boardSize;r++){
     board[r]=[];
@@ -51,14 +53,16 @@ function initBoard(){
       cell.style.height=`${size}px`;
       cell.dataset.row=r;cell.dataset.col=c;
       if(r===c){
-        board[r][c]="O";cell.textContent="O";
+        board[r][c]="O";
+        cell.textContent="O";
         cell.classList.add("fixed");
       }else board[r][c]="";
       cell.addEventListener("click",()=>{
         if(gameOver)return;
         if(removeMode&&!cell.classList.contains("fixed")&&board[r][c]!==""){
           let letter=board[r][c];
-          board[r][c]="";cell.textContent="";
+          board[r][c]="";
+          cell.textContent="";
           addTileToPool(letter);
           removeMode=false;
           document.getElementById("remove").classList.remove("selected");
@@ -97,7 +101,8 @@ function initBoard(){
 function addTileToPool(letter){
   const pool=document.getElementById("pool");
   let t=document.createElement("div");
-  t.classList.add("tile");t.dataset.letter=letter;
+  t.classList.add("tile");
+  t.dataset.letter=letter;
   t.innerHTML='<div class="back"></div>';
   t.addEventListener("click",()=>{
     if(gameOver)return;
@@ -128,14 +133,15 @@ function updatePoolCounters(){
     `Remaining - X:${counts.X} | F:${counts.F} | O:${counts.O}`;
 }
 function isBoardFull(){
-  return board.every(row=>row.every(cell=>cell!==""));
+  for(let r=0;r<boardSize;r++)for(let c=0;c<boardSize;c++)if(board[r][c]==="")return false;
+  return true;
 }
 function checkFox(){
   const dirs=[[0,1],[1,0],[1,1],[1,-1]];
   for(let r=0;r<boardSize;r++)for(let c=0;c<boardSize;c++){
     if(!board[r][c])continue;
-    for(let [dr,dc]of dirs){
-      let letters=board[r][c], cells=[[r,c]];
+    for(let [dr,dc] of dirs){
+      let letters=board[r][c],cells=[[r,c]];
       for(let k=1;k<3;k++){
         let nr=r+dr*k,nc=c+dc*k;
         if(nr>=0&&nr<boardSize&&nc>=0&&nc<boardSize){
@@ -242,21 +248,14 @@ acceptCookiesBtn.addEventListener("click",()=>{
 declineCookiesBtn.addEventListener("click",()=>cookiePopup.style.display="none");
 document.getElementById("reset").addEventListener("click",resetGame);
 const helpBtn=document.getElementById("help-btn");
-const tutorialPopup=document.getElementById("tutorial-popup");
+const tutorial=document.getElementById("tutorial-popup");
 const closeTut=document.getElementById("close-tutorial");
-if(!localStorage.getItem("tutorialSeen")){
-  tutorialPopup.style.display="flex";
-}
-helpBtn.addEventListener("click",()=>tutorialPopup.style.display="flex");
+if(!localStorage.getItem("tutorialSeen"))tutorial.style.display="flex";
+helpBtn.addEventListener("click",()=>tutorial.style.display="flex");
 closeTut.addEventListener("click",()=>{
-  tutorialPopup.style.display="none";
+  tutorial.style.display="none";
   localStorage.setItem("tutorialSeen","true");
 });
-if(abilitiesEnabled){
-  document.getElementById("abilities").style.display="flex";
-  resetAbilityCharges();
-}else{
-  document.getElementById("abilities").style.display="none";
-}
-initBoard();
-initPool();
+if(abilitiesEnabled){document.getElementById("abilities").style.display="flex";resetAbilityCharges();}
+else document.getElementById("abilities").style.display="none";
+initBoard();initPool();

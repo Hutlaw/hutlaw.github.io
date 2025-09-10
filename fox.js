@@ -1,7 +1,7 @@
 let boardSize,abilitiesEnabled;
 let attempts,wins;
 let scoreKeyAttempts,scoreKeyWins;
-const abilityChargesMapping={3:1,4:2,5:3,6:4};
+const abilityChargesMapping={3:1,4:2,5:3,6:4,7:5,8:6,9:7,10:8};
 let revealCharges,removeCharges,hintCharges;
 let removeMode=false;
 let board=[];
@@ -36,7 +36,15 @@ function updateScoreKeys(){
   scoreKeyWins=`wins_${boardSize}_${abilitiesEnabled}`;
 }
 function getCellSize(){
-  return{3:100,4:80,5:60,6:50}[boardSize];
+  return{3:100,4:80,5:60,6:50,7:42,8:36,9:32,10:28}[boardSize];
+}
+function fisherYatesShuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    const tmp=arr[i];
+    arr[i]=arr[j];
+    arr[j]=tmp;
+  }
 }
 function initBoard(){
   board=[];
@@ -97,6 +105,19 @@ function initBoard(){
       be.appendChild(cell);
     }
   }
+  if(boardSize>=7){
+    for(let r=0;r<boardSize;r++){
+      let c = boardSize - 1 - r;
+      if(board[r][c]===""){
+        board[r][c]="O";
+        const cellElem = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        if(cellElem){
+          cellElem.textContent="O";
+          cellElem.classList.add("fixed");
+        }
+      }
+    }
+  }
 }
 function addTileToPool(letter){
   const pool=document.getElementById("pool");
@@ -117,13 +138,24 @@ function initPool(){
   const pool=document.getElementById("pool");
   pool.innerHTML="";
   const total=boardSize*(boardSize-1);
-  let numO=(boardSize<5?2:4);
+  let baseNumO;
+  if(boardSize<5) baseNumO=2;
+  else if(boardSize===5||boardSize===6) baseNumO=4;
+  else if(boardSize===7) baseNumO=6;
+  else if(boardSize===8) baseNumO=8;
+  else if(boardSize===9) baseNumO=10;
+  else if(boardSize===10) baseNumO=12;
+  let numO = baseNumO;
+  if(boardSize>=7){
+    const reduction = Math.floor(boardSize/2);
+    numO = Math.max(2, baseNumO - reduction);
+  }
   let numX=numF=(total-numO)/2;
   let letters=[];
   for(let i=0;i<numX;i++)letters.push("X");
   for(let i=0;i<numF;i++)letters.push("F");
   for(let i=0;i<numO;i++)letters.push("O");
-  letters.sort(()=>Math.random()-0.5);
+  fisherYatesShuffle(letters);
   letters.forEach(l=>addTileToPool(l));
 }
 function updatePoolCounters(){

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Don't Find the Fox</title>
+  <link rel="stylesheet" href="fox.css"/>
+</head>
+<body>
+  <header>
+    <h1>Don't Find the Fox</h1>
+    <div class="header-right">
+      <div id="lives">Lives: <span id="lives-count">3</span></div>
+      <div id="counters">Attempts: <span id="attempts">0</span> | Wins: <span id="wins">0</span></div>
+      <button id="help-btn">Help</button>
+    </div>
+  </header>
+
+  <main id="game">
+    <div id="board-wrapper">
+      <div id="board"></div>
+    </div>
+
+    <div id="pool-area">
+      <div id="pool-counters"></div>
+      <div id="pool"></div>
+    </div>
+
+    <div id="message"></div>
+
+    <div id="controls">
+      <button id="reset" style="display:none;">Reset Game</button>
+      <button id="restart" style="display:none;">Restart Now</button>
+    </div>
+  </main>
+
+  <div id="life-modal" class="modal" style="display:none;">
+    <div class="modal-content life-modal">
+      <h2 id="life-title">Life Lost</h2>
+      <p id="life-text">You lost a life. Click continue to remove the FOX and keep playing, or restart.</p>
+      <div class="modal-buttons">
+        <button id="continue-btn">Continue</button>
+        <button id="restart-btn">Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tutorial-popup" class="modal" style="display:none;">
+    <div class="modal-content tutorial">
+      <h2>How to Play</h2>
+      <div class="tutorial-step">
+        <table class="tut-table">
+          <tr><td></td><td></td><td>F</td></tr>
+          <tr><td></td><td>O</td><td></td></tr>
+          <tr><td>X</td><td></td><td></td></tr>
+        </table>
+        <p>You must not create the sequence <code>F-O-X</code> anywhere on the board in any direction.</p>
+      </div>
+      <div class="tutorial-step">
+        <p>Tiles are drawn face-down. You choose where to place before you see what the tile is — surprises happen!</p>
+      </div>
+      <button id="close-tutorial">Got it!</button>
+    </div>
+  </div>
+
+  <div id="cookie-popup" class="modal" style="display:none;">
+    <div class="modal-content">
+      <p>This site uses cookies for analytics and to enhance your experience. Please see our <a href="http://hutlaw.xyz/privacy" target="_blank">privacy policy</a>.</p>
+      <div class="modal-buttons">
+        <button id="accept-cookies">Accept</button>
+        <button id="decline-cookies">Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="http://hutlaw.xyz" target="_blank">Main</a>
+    <span> | </span>
+    <a href="https://github.com/Hutlaw/hutlaw.github.io" target="_blank">github</a>
+    <span> | </span>
+    <a href="http://hutlaw.xyz/privacy" target="_blank">privacy</a>
+  </footer>
+
+  <script src="fox.js"></script>
+</body>
+</html>
